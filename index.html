@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kartu Login Survei Lingkungan Belajar</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #005A9E; /* A professional blue */
+            --secondary-color: #f8f9fa; /* Light grey background */
+            --text-color: #333;
+            --border-color: #dee2e6;
+            --header-bg: #ffffff;
+            --shadow-color: rgba(0, 0, 0, 0.05);
+            --button-color: #28a745; /* Green for action button */
+            --token-bg: rgba(255, 255, 255, 0.1);
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: var(--header-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            overflow: hidden;
+        }
+        .header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .header-logo {
+            height: 60px;
+            width: 60px;
+            margin-right: 20px;
+            background-color: #fff;
+            border-radius: 50%;
+            object-fit: contain;
+        }
+        .header-text {
+            flex-grow: 1;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 1.6em;
+            font-weight: 700;
+        }
+        .header p {
+            margin: 5px 0 0;
+            opacity: 0.9;
+        }
+        .header .info-line {
+            font-weight: 500;
+            margin-top: 8px;
+        }
+        .header .token {
+            background-color: rgb(255, 105, 47);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            padding: 3px 10px;
+            font-family: monospace;
+            font-size: 1.1em;
+        }
+        .login-button {
+            background-color: var(--button-color);
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: background-color 0.3s;
+            text-align: center;
+        }
+        .login-button:hover {
+            background-color: #218838;
+        }
+        .header-buttons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .about-button {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-family: 'Roboto', sans-serif;
+        }
+        .about-button:hover {
+            background-color: #5a6268;
+        }
+        .login-guide-button {
+            background-color: #17a2b8;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-family: 'Roboto', sans-serif;
+        }
+        .login-guide-button:hover {
+            background-color: #138496;
+        }
+        .back-button {
+            background-color: #ffd000;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: background-color 0.3s;
+            font-family: 'Roboto', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .back-button:hover {
+            background-color: #5a32a3;
+            color: white;
+            text-decoration: none;
+        }
+        /* Popup Modal Styles */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s ease;
+        }
+        .popup-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 0;
+            border-radius: 12px;
+            width: 95%;
+            max-width: 600px;
+            max-height: 90vh;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.3s ease;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .popup-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .popup-header h2 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+        .popup-close {
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .popup-close:hover {
+            opacity: 0.7;
+        }
+        .popup-body {
+            padding: 30px;
+            line-height: 1.8;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+        .popup-body p {
+            margin-bottom: 15px;
+        }
+        .popup-body strong {
+            color: var(--primary-color);
+        }
+        .popup-footer {
+            padding: 20px 30px;
+            background-color: var(--secondary-color);
+            text-align: center;
+        }
+        .popup-footer button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+        .popup-footer button:hover {
+            background-color: #004085;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        /* Login Guide Specific Styles */
+        .login-steps {
+            margin: 20px 0;
+        }
+        .login-step {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-color);
+        }
+        .step-number {
+            background-color: var(--primary-color);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        .step-content {
+            flex-grow: 1;
+        }
+        .step-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--primary-color);
+        }
+        .step-description {
+            margin: 0;
+            line-height: 1.6;
+        }
+        .token-highlight {
+            background-color: #fff3cd;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ffeaa7;
+            margin: 10px 0;
+            font-family: monospace;
+            font-weight: bold;
+            text-align: center;
+        }
+        .warning-box {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #f5c6cb;
+            margin: 15px 0;
+        }
+        .warning-box strong {
+            color: #721c24;
+        }
+        .content {
+            padding: 30px;
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+        .search-input {
+            width: 100%;
+            max-width: 400px;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            text-align: left;
+        }
+        th {
+            background-color: var(--secondary-color);
+            font-weight: 500;
+        }
+        tr:nth-child(even) {
+            background-color: #fdfdfd;
+        }
+        .footer-note {
+            text-align: center;
+            font-style: italic;
+            color: #6c757d;
+            padding: 20px 30px;
+            background-color: var(--secondary-color);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 850px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+            .header-logo {
+                margin: 0 0 15px 0;
+            }
+            .header-text {
+                margin-bottom: 15px;
+            }
+            .header-buttons {
+                flex-direction: column;
+                width: 100%;
+                gap: 10px;
+            }
+            .back-button, .about-button, .login-guide-button, .login-button {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        /* Mobile and Tablet Popup Responsive Styles */
+        @media (max-width: 768px) {
+            .popup-content {
+                margin: 2% auto;
+                width: 98%;
+                max-height: 96vh;
+                border-radius: 8px;
+            }
+            .popup-header {
+                padding: 15px;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            .popup-header h2 {
+                font-size: 1.3em;
+                flex-grow: 1;
+            }
+            .popup-close {
+                font-size: 24px;
+                width: 25px;
+                height: 25px;
+            }
+            .popup-body {
+                padding: 20px 15px;
+                font-size: 14px;
+            }
+            .popup-footer {
+                padding: 15px;
+            }
+            .popup-footer button {
+                width: 100%;
+                padding: 12px;
+                font-size: 16px;
+            }
+            
+            /* Login Steps Mobile Optimization */
+            .login-steps {
+                margin: 15px 0;
+            }
+            .login-step {
+                flex-direction: column;
+                padding: 12px;
+                margin-bottom: 15px;
+                text-align: center;
+            }
+            .step-number {
+                margin: 0 auto 10px auto;
+                width: 25px;
+                height: 25px;
+                font-size: 14px;
+            }
+            .step-content {
+                text-align: left;
+            }
+            .step-title {
+                font-size: 16px;
+                margin-bottom: 8px;
+            }
+            .step-description {
+                font-size: 14px;
+                line-height: 1.5;
+            }
+            .token-highlight {
+                font-size: 16px;
+                padding: 12px;
+                margin: 12px 0;
+            }
+            .warning-box {
+                padding: 12px;
+                font-size: 14px;
+                line-height: 1.5;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .popup-content {
+                margin: 1% auto;
+                width: 99%;
+                max-height: 98vh;
+                border-radius: 6px;
+            }
+            .popup-header {
+                padding: 12px;
+            }
+            .popup-header h2 {
+                font-size: 1.2em;
+            }
+            .popup-body {
+                padding: 15px 12px;
+                font-size: 13px;
+            }
+            .popup-body p {
+                margin-bottom: 12px;
+            }
+            .login-step {
+                padding: 10px;
+                margin-bottom: 12px;
+            }
+            .step-number {
+                width: 22px;
+                height: 22px;
+                font-size: 12px;
+            }
+            .step-title {
+                font-size: 15px;
+            }
+            .step-description {
+                font-size: 13px;
+            }
+            .token-highlight {
+                font-size: 14px;
+                padding: 10px;
+            }
+            .warning-box {
+                padding: 10px;
+                font-size: 13px;
+            }
+            .popup-footer {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <img src="Logosekolah.png" alt="Logo Sekolah" class="header-logo">
+            
+            <div class="header-text">
+                <h1>Survei Lingkungan Belajar</h1>
+                <p>UPT SATUAN PENDIDIKAN SDN TOYANING I REJOSO</p>
+                <p class="info-line">
+                    <strong>NPSN:</strong> 20519260 | <strong>Token:</strong> <span class="token">FFC7DBCBD6</span>
+                </p>
+            </div>
+            
+            <div class="header-buttons">
+                <a href="https://portal-admin-sd-toyaning-01.vercel.app/" class="back-button">← Kembali ke Portal Admin</a>
+                <button onclick="openAboutPopup()" class="about-button">Tentang</button>
+                <button onclick="openLoginGuidePopup()" class="login-guide-button">Cara Login</button>
+                <a href="https://surveilingkunganbelajar.kemdikbud.go.id/login" class="login-button">Halaman Login</a>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="controls">
+                <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Cari berdasarkan nama..." class="search-input">
+            </div>
+            
+            <div class="table-container">
+                <table id="respondenTable">
+                    <thead>
+                        <tr>
+                            <th>Nama Responden</th>
+                            <th>Tanggal Lahir</th>
+                            <th>NIK</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Fenny Dian Novirolita</td><td>10 November 1985</td><td>Sesuai aplikasi DAPODIK/EMIS</td></tr>
+                        <tr><td>MUHAMMAD FAISAL ABDA'U</td><td>13 Februari 1997</td><td>Sesuai aplikasi DAPODIK/EMIS</td></tr>
+                        <tr><td>Ida Fitriani</td><td>22 Agustus 1980</td><td>Sesuai aplikasi DAPODIK/EMIS</td></tr>
+                        <tr><td>Ellyna Nur Rahmawati, S.Pd</td><td>13 Juli 1991</td><td>Sesuai aplikasi DAPODIK/EMIS</td></tr>
+                        <tr><td>EKA YUNITA</td><td>23 Juni 1986</td><td>Sesuai aplikasi DAPODIK/EMIS</td></tr>
+                        <tr><td>Siyam Mufidah</td><td>08 Desember 1967</td><td>Sesuai aplikasi DAPODIK/EMIS</td></tr>
+                        <tr><td>Yuni Sulfiah</td><td>11 Juni 1980</td><td>Sesuai aplikasi DAPODIK/EMIS</td></tr>
+                        <tr><td>Sila Anggarsari</td><td>22 Maret 1993</td><td>Sesuai aplikasi DAPODIK/EMIS</td></tr>
+                        <tr><td>Endah Suryanti</td><td>01 Oktober 1980</td><td>Sesuai aplikasi DAPODIK/EMIS</td></tr>
+                        <tr><td>TRI WAHYUNI</td><td>15 Juni 1984</td><td>Sesuai aplikasi DAPODIK/EMIS</td></tr>
+                        <tr><td>Sri Lestari</td><td>12 Maret 1971</td><td>Sesuai aplikasi DAPODIK/EMIS</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="footer-note">
+            <p><strong>Perhatian!</strong> Informasi ini bersifat RAHASIA.</p>
+        </div>
+    </div>
+
+    <!-- Popup Modal -->
+    <div id="aboutPopup" class="popup-overlay">
+        <div class="popup-content">
+            <div class="popup-header">
+                <h2>Tentang Survei Lingkungan Belajar</h2>
+                <button class="popup-close" onclick="closeAboutPopup()">&times;</button>
+            </div>
+            <div class="popup-body">
+                <p><strong>Survei Lingkungan Belajar</strong> adalah program yang diselenggarakan oleh Kementerian Pendidikan dan Kebudayaan Republik Indonesia untuk mengukur dan menilai kondisi lingkungan belajar di satuan pendidikan.</p>
+                
+                <p><strong>UPT Satuan Pendidikan SDN Toyaning I Rejoso</strong> dengan NPSN <strong>20519260</strong> telah mengikuti program ini sebagai bagian dari upaya peningkatan kualitas pendidikan.</p>
+                
+                <p>Data responden yang ditampilkan pada halaman ini merupakan informasi penting untuk proses survei dan bersifat <strong>RAHASIA</strong>. Mohon untuk menjaga kerahasiaan informasi ini.</p>
+                
+                <p>Untuk mengakses halaman survei resmi, silakan klik tombol "Halaman Login" dan gunakan token yang telah disediakan: <strong>FFC7DBCBD6</strong></p>
+            </div>
+            <div class="popup-footer">
+                <button onclick="closeAboutPopup()">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Guide Popup Modal -->
+    <div id="loginGuidePopup" class="popup-overlay">
+        <div class="popup-content">
+            <div class="popup-header">
+                <h2>Panduan Cara Login Survei</h2>
+                <button class="popup-close" onclick="closeLoginGuidePopup()">&times;</button>
+            </div>
+            <div class="popup-body">
+                <p>Berikut adalah langkah-langkah untuk melakukan login ke sistem Survei Lingkungan Belajar:</p>
+                
+                <div class="login-steps">
+                    <div class="login-step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <div class="step-title">Akses Halaman Login</div>
+                            <div class="step-description">Klik tombol "Halaman Login" di bagian atas halaman ini atau kunjungi langsung: <strong>surveilingkunganbelajar.kemdikbud.go.id/login</strong></div>
+                        </div>
+                    </div>
+                    
+                    <div class="login-step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <div class="step-title">Masukkan Token Sekolah</div>
+                            <div class="step-description">Gunakan token sekolah yang telah disediakan untuk login:</div>
+                            <div class="token-highlight">FFC7DBCBD6</div>
+                        </div>
+                    </div>
+                    
+                    <div class="login-step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <div class="step-title">Pilih Nama Responden</div>
+                            <div class="step-description">Setelah berhasil login, pilih nama responden dari daftar yang tersedia sesuai dengan data yang ditampilkan pada halaman ini.</div>
+                        </div>
+                    </div>
+                    
+                    <div class="login-step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <div class="step-title">Isi Survei</div>
+                            <div class="step-description">Jawab semua pertanyaan survei dengan jujur dan sesuai dengan kondisi yang sebenarnya di lingkungan belajar.</div>
+                        </div>
+                    </div>
+                    
+                    <div class="login-step">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <div class="step-title">Submit Survei</div>
+                            <div class="step-description">Setelah selesai mengisi semua pertanyaan, klik tombol submit untuk menyelesaikan survei.</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="warning-box">
+                    <strong>⚠️ Perhatian Penting:</strong><br>
+                    • Pastikan menggunakan nama dan data yang sesuai dengan yang terdaftar<br>
+                    • Token hanya berlaku untuk responden yang terdaftar di sekolah ini<br>
+                    • Jangan bagikan token kepada pihak yang tidak berwenang<br>
+                    • Survei harus diisi dengan jujur untuk mendapatkan data yang akurat
+                </div>
+                
+                <p><strong>Butuh bantuan?</strong> Jika mengalami kendala, silakan hubungi administrator sekolah atau petugas survei.</p>
+            </div>
+            <div class="popup-footer">
+                <button onclick="closeLoginGuidePopup()">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    function searchTable() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("searchInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("respondenTable");
+        tr = table.getElementsByTagName("tr");
+
+        for (i = 1; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+
+    // Popup functionality
+    function openAboutPopup() {
+        document.getElementById("aboutPopup").style.display = "block";
+        document.body.style.overflow = "hidden"; // Prevent background scrolling
+    }
+
+    function closeAboutPopup() {
+        document.getElementById("aboutPopup").style.display = "none";
+        document.body.style.overflow = "auto"; // Restore scrolling
+    }
+
+    // Close popup when clicking outside of it
+    window.onclick = function(event) {
+        var aboutPopup = document.getElementById("aboutPopup");
+        var loginGuidePopup = document.getElementById("loginGuidePopup");
+        
+        if (event.target == aboutPopup) {
+            closeAboutPopup();
+        }
+        if (event.target == loginGuidePopup) {
+            closeLoginGuidePopup();
+        }
+    }
+
+    // Close popup with Escape key
+    document.addEventListener("keydown", function(event) {
+        if (event.key === "Escape") {
+            closeAboutPopup();
+            closeLoginGuidePopup();
+        }
+    });
+
+    // Login Guide Popup functionality
+    function openLoginGuidePopup() {
+        document.getElementById("loginGuidePopup").style.display = "block";
+        document.body.style.overflow = "hidden"; // Prevent background scrolling
+    }
+
+    function closeLoginGuidePopup() {
+        document.getElementById("loginGuidePopup").style.display = "none";
+        document.body.style.overflow = "auto"; // Restore scrolling
+    }
+    </script>
+
+</body>
+</html>
